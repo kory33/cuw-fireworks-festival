@@ -8,6 +8,7 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Firework
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.util.Vector
+import java.lang.IllegalStateException
 import java.util.*
 
 private val colors = arrayOf(
@@ -28,6 +29,14 @@ private val colors = arrayOf(
         Color.SILVER,
         Color.GRAY,
         Color.BLACK
+)
+
+private val typeThresholds = arrayOf(
+        Pair(Type.BALL, 0.7),
+        Pair(Type.BALL_LARGE, 0.5),
+        Pair(Type.BURST, 0.9),
+        Pair(Type.STAR, 0.6),
+        Pair(Type.CREEPER, 1.0)
 )
 
 class FireworksShow(private val plugin: JavaPlugin,
@@ -54,6 +63,13 @@ class FireworksShow(private val plugin: JavaPlugin,
         return intensity * Math.pow(t, 0.2) * Math.exp(-timeBias * t * t)
     }
 
+    private fun getRandomWeightedType() : Type {
+        val resultType : Type? = typeThresholds
+                .firstOrNull {(_, threshold) -> random.nextDouble() < threshold}?.first
+
+        return resultType ?: throw IllegalStateException("Type could not be selected.")
+    }
+
     private val random = Random()
 
     private var colorIndex = 0
@@ -65,13 +81,11 @@ class FireworksShow(private val plugin: JavaPlugin,
         val firework = location.world.spawnEntity(location, EntityType.FIREWORK) as Firework
         val fireworkMeta = firework.fireworkMeta
 
-        val type = Type.values()[random.nextInt(Type.values().size)]
-
         val effect = FireworkEffect.builder()
                 .flicker(random.nextBoolean())
                 .withColor(colors[colorIndex])
                 .withFade(colors[fadeColorIndex])
-                .with(type)
+                .with(getRandomWeightedType())
                 .trail(random.nextBoolean())
                 .build()
 

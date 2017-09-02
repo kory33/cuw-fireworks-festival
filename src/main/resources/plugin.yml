@@ -7,7 +7,7 @@ author: kory33
 commands:
     cuw-fireworks-festival:
         usage: /cuw-fireworks-festival [radius] [timeTick] [timeBias] [intensity]
-        alias: cfwf
+        aliases: cfwf
 
 permissions:
     cfwf.launch:
