@@ -18,10 +18,7 @@ class CuwFireworksFestival : JavaPlugin() {
 
         val (radius, time_tick_double) = args.map { it.toDouble() }
 
-        FireworksShow(this,
-                sender.location,
-                radius,
-                time_tick_double.toInt()).begin()
+        FireworksShow(this, sender.location, radius, time_tick_double.toInt()).begin()
 
         return true
     }

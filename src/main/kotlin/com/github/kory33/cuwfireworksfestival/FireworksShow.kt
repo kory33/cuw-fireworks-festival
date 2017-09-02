@@ -34,17 +34,18 @@ class FireworksShow(private val plugin: JavaPlugin,
                     private val center: Location,
                     private val radius: Double,
                     private val lengthTick: Int) {
-    private val timeBias = 7.0
+
+    // parameters
+    private val timeBias = 8.0
     private val yRange = 15.0
-    private val intensity = 0.8
-
-    private var colorIndex = 0
-    private var fadeColorIndex = 0
-
+    private val intensity = 0.5
     private val colorIndexChangeThreshold = 0.1
     private val fadeColorIndexChangeThreshold = 0.2
 
     private val random = Random()
+
+    private var colorIndex = 0
+    private var fadeColorIndex = 0
     private var pastTick = 0
 
     private fun spawnRandomizedFirework(location: Location) {
