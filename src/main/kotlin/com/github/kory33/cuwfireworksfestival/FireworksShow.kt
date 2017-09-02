@@ -44,7 +44,14 @@ class FireworksShow(private val plugin: JavaPlugin,
 
     private val skipBeginThreshold = 0.15
     private fun getMaxSkipNum() : Int {
-        return (4 + Math.pow(15.0, (pastTick * 1.0 / lengthTick))).toInt()
+        val t = pastTick * 1.0 / lengthTick
+        return (15.0 * Math.exp(- 5.0 * Math.pow(t - 0.5, 2.0))).toInt()
+    }
+
+    private fun getSpawnThreshold() : Double {
+        val t = 1 - (pastTick * 1.0 / lengthTick)
+
+        return intensity * Math.pow(t, 0.2) * Math.exp(-timeBias * t * t)
     }
 
     private val random = Random()
@@ -76,9 +83,7 @@ class FireworksShow(private val plugin: JavaPlugin,
 
     private fun shouldSpawn() : Boolean {
         val randVal = random.nextDouble()
-        val t = 1 - (pastTick * 1.0 / lengthTick)
-
-        val threshold = intensity * Math.pow(t, 0.2) * Math.exp(-timeBias * t * t)
+        val threshold = getSpawnThreshold()
 
         return randVal < threshold
     }
