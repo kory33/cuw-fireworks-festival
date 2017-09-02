@@ -33,20 +33,26 @@ private val colors = arrayOf(
 class FireworksShow(private val plugin: JavaPlugin,
                     private val center: Location,
                     private val radius: Double,
-                    private val lengthTick: Int) {
+                    private val lengthTick: Int,
+                    private val timeBias: Double,
+                    private val intensity: Double) {
 
     // parameters
-    private val timeBias = 8.0
     private val yRange = 15.0
-    private val intensity = 0.5
-    private val colorIndexChangeThreshold = 0.1
-    private val fadeColorIndexChangeThreshold = 0.2
+    private val colorIndexChangeThreshold = 0.3
+    private val fadeColorIndexChangeThreshold = 0.3
+
+    private val skipBeginThreshold = 0.15
+    private fun getMaxSkipNum() : Int {
+        return (4 + Math.pow(15.0, (pastTick * 1.0 / lengthTick))).toInt()
+    }
 
     private val random = Random()
 
     private var colorIndex = 0
     private var fadeColorIndex = 0
     private var pastTick = 0
+    private var fireworksToSkip = 0
 
     private fun spawnRandomizedFirework(location: Location) {
         val firework = location.world.spawnEntity(location, EntityType.FIREWORK) as Firework
@@ -89,8 +95,18 @@ class FireworksShow(private val plugin: JavaPlugin,
         }
     }
 
-    private fun play() {
+    private fun handleSpawn() {
         if (shouldSpawn()) {
+            if (fireworksToSkip != 0) {
+                fireworksToSkip -= 1
+                return
+            }
+
+            if (random.nextDouble() < skipBeginThreshold) {
+                fireworksToSkip = (random.nextDouble() * getMaxSkipNum()).toInt()
+                return
+            }
+
             val r = radius * random.nextDouble()
             val theta = random.nextDouble() * 2.0 * Math.PI
             val vector = Vector(r * Math.cos(theta), random.nextDouble() * yRange, r * Math.sin(theta))
@@ -100,6 +116,10 @@ class FireworksShow(private val plugin: JavaPlugin,
 
             updateColorIndex()
         }
+    }
+
+    private fun play() {
+        handleSpawn()
 
         if (pastTick < lengthTick) {
             pastTick += 1

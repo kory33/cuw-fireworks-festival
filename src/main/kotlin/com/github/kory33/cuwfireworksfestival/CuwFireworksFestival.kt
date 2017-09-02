@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class CuwFireworksFestival : JavaPlugin() {
     override fun onCommand(sender: CommandSender?, command: Command?, label: String?, args: Array<out String>): Boolean {
-        if (args.size < 2) {
+        if (args.size < 4) {
             return false
         }
 
@@ -16,9 +16,9 @@ class CuwFireworksFestival : JavaPlugin() {
             return true
         }
 
-        val (radius, time_tick_double) = args.map { it.toDouble() }
+        val (radius, timeTick, timeBias, intensity) = args.map { it.toDouble() }
 
-        FireworksShow(this, sender.location, radius, time_tick_double.toInt()).begin()
+        FireworksShow(this, sender.location, radius, timeTick.toInt(), timeBias, intensity).begin()
 
         return true
     }
