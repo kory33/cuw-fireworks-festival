@@ -1,0 +1,15 @@
+name: CuwFireworksFestival
+version: 0.0.1-SNAPSHOT
+main: com.github.kory33.cuwfireworksfestival.CuwFireworksFestival
+
+author: kory33
+
+commands:
+    cuw-fireworks-festival:
+        usage: /cuw-fireworks-festival [radius] [time_tick]
+        alias: cfwf
+
+permissions:
+    cfwf.launch:
+        description: allows a player to launch a set of fireworks
+        default: op
