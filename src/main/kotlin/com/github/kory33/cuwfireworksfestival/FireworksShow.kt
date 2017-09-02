@@ -48,8 +48,8 @@ class FireworksShow(private val plugin: JavaPlugin,
 
     // parameters
     private val yRange = 15.0
-    private val colorIndexChangeThreshold = 0.3
-    private val fadeColorIndexChangeThreshold = 0.3
+    private val colorIndexChangeThreshold = 0.1
+    private val fadeColorIndexChangeThreshold = 0.1
 
     private val skipBeginThreshold = 0.15
     private fun getMaxSkipNum() : Int {
